@@ -1,8 +1,6 @@
-// src/components/ReportConstructor.tsx
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import DataTable from './DataTable/DataTable';
 import Papa from "papaparse";
-import ChartComponent from './ChartComponent/ChartComponent';
 import './ReportConstructor.css';
 
 const testData = [
@@ -13,10 +11,11 @@ const testData = [
 ];
 
 const ReportConstructor: React.FC = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     const [rawData, setRawData] = useState<any[]>([]);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [filteredData, setFilteredData] = useState<any[]>([]);
+    const [showExportSelector, setShowExportSelector] = useState<boolean>(false);
+
+    const canvasRef = useRef<HTMLCanvasElement | null>(null); // Ссылка на canvas
 
     const handleUploadJson = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -34,10 +33,8 @@ const ReportConstructor: React.FC = () => {
     const handleUploadCsv = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            // Используем PapaParse для обработки CSV
             Papa.parse(file, {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                complete: (results: { data: React.SetStateAction<any[]>; }) => {
+                complete: (results: any) => {
                     setRawData(results.data);
                     setFilteredData(results.data);
                 },
@@ -46,28 +43,31 @@ const ReportConstructor: React.FC = () => {
         }
     };
 
+
+   
+
     return (
         <div className="report-constructor">
             <div className="upload-section">
-            <p>загрузить в .json</p>
+                <p>Загрузить в .json</p>
                 <input
                     type="file"
                     accept=".json"
                     onChange={handleUploadJson}
-                  
                 />
-                <p>загрузить в .csv</p>
+
+<p>Загрузить в .csv</p>
                 <input
                     type="file"
                     accept=".csv"
                     onChange={handleUploadCsv}
-                    
-                  
                 />
             </div>
-            {/* //filtredData */}
-            <DataTable data={testData} /> 
-            <ChartComponent data={testData} />
+
+            <div className="export-section">
+                <button onClick={() => setShowExportSelector(true)}>Экспортировать</button>
+            </div>
+            <DataTable data={filteredData.length > 0 ? filteredData : testData} />
         </div>
     );
 };

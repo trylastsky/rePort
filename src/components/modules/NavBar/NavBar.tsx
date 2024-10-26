@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClipboardList, faFileAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAtom, faClipboardList, faFileAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import './Navbar.css'; 
 
 const Navbar: React.FC = () => {
@@ -10,6 +10,15 @@ const Navbar: React.FC = () => {
     return (
         <nav className="navbar">
             <ul className="navbar-list">
+            <li className="navbar-item">
+                    <Link 
+                        className={`navlink decoration_none transition0_3 ${location.pathname === '/constructor' ? 'active' : ''}`} 
+                        to="/constructor"
+                    >
+                        <FontAwesomeIcon icon={faAtom} className="navbar-icon" />
+                        <span className="navbar-text">Конструктор</span>
+                    </Link>
+                </li>
                 <li className="navbar-item">
                     <Link 
                         className={`navlink decoration_none transition0_3 ${location.pathname === '/constructor-projects' ? 'active' : ''}`} 

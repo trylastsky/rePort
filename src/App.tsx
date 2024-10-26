@@ -5,7 +5,7 @@ import MainPage from './components/OtherPages/MainPage/MainPage';
 import PrivacyPolicyPage from './components/OtherPages/PrivacyPolicyPage/PrivacyPolicyPage';
 import AboutPage from './components/OtherPages/AboutPage/AboutPage';
 import Footer from './components/modules/Footer/Footer';
-import Constructor from './components/MainLogic/Constructor/Constructor';
+import ReportConstructor from './components/MainLogic/ReportConstructor/ReportConstructor';
 import FileList from './components/MainLogic/FileList/FileList';
 import Navbar from './components/modules/NavBar/NavBar';
 import TrashPage from './components/MainLogic/TrashPage/TrashPage';
@@ -27,7 +27,7 @@ const App: React.FC = () => {
       {showNavbar && <Navbar />}
       <main>
         <Routes>
-          <Route path="/constructor" element={<Constructor />} />
+          <Route path="/constructor" element={<ReportConstructor />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy-terms" element={<PrivacyPolicyPage />} />
           <Route path="/constructor-file_list" element={<FileList/>} />
@@ -41,7 +41,6 @@ const App: React.FC = () => {
   );
 };
 
-// Обернем App в Router для получения location
 const WrappedApp: React.FC = () => (
   <Router>
     <App />

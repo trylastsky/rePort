@@ -38,3 +38,15 @@
 #trash {
     margin-left: auto; 
 }
+
+@media(max-width:528px) {
+    .navbar-text {
+        display: none;
+    }
+
+    .navbar-icon {
+        height: 32px;
+        width: 32px;
+        padding-top: 8px;
+    }
+}

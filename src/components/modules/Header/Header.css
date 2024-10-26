@@ -1,0 +1,116 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  background-color: #282c34; 
+  padding: 20px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
+  position: relative; 
+  margin: 0;
+}
+
+.logo-image {
+  width: 184px; 
+  height: auto; 
+  cursor: pointer; 
+  transition: filter 0.3s ease; 
+}
+
+.logo-image:hover {
+  filter: brightness(0.7); 
+}
+
+nav {
+  margin-left: auto; /
+}
+
+.nav-list {
+  list-style-type: none;
+  display: flex;
+  gap: 15px;
+  padding: 10px; 
+  font-family: "Montserrat Alternates", sans-serif;
+  font-weight: 100;
+  font-size: 1.25rem;
+}
+
+.nav-list li {
+  display: inline;
+}
+
+.nav-list a {
+  text-decoration: none;
+  color: #FD5556;
+  font-weight: bold;
+  padding: 10px;
+  transition: ease all 0.3s;
+}
+
+.nav-list a:hover {
+  color: #FFFF; 
+}
+
+.hamburger {
+  display: none; 
+  flex-direction: column;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.line {
+  width: 30px;
+  height: 3px;
+  background-color: #FD5556;
+  margin: 3px 0; 
+  transition: all 0.3s;
+}
+
+.line1.active {
+  transform: rotate(45deg) translate(6px, 6px); 
+}
+
+.line2.active {
+  opacity: 0; 
+}
+
+.line3.active {
+  transform: rotate(-45deg) translate(6px, -6px); 
+}
+
+@media (max-width: 768px) {
+  .nav {
+    display: none; 
+  }
+
+  .nav.open {
+    display: flex; 
+    flex-direction: column; 
+    width: 100%; 
+    background-color: #282c34; 
+    position: absolute; 
+    top: 115px; 
+    left: 0;
+    z-index: 1; 
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+
+  .nav-list {
+    opacity: 0;
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  }
+
+  .nav.open .nav-list {
+    opacity: 1;
+    max-height: 200px; 
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+
+  }
+
+  .hamburger {
+    display: flex; 
+  }
+}

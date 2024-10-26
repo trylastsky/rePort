@@ -1,0 +1,90 @@
+.privacy-policy-page {
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 20px; 
+    font-family: "Montserrat Alternates", sans-serif; 
+    color: #F9F9F9; 
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.5rem; 
+    color: #FD5556; 
+}
+
+h2 {
+    font-size: 2rem; 
+    margin-top: 30px; 
+    color: #FD5556;
+}
+
+ul {
+    padding-left: 20px; 
+}
+
+p {
+    line-height: 1.6; 
+}
+
+
+@media (max-width: 768px) {
+    .privacy-policy-page {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem; 
+    }
+
+    p {
+        font-size: 0.9rem; 
+    }
+}
+
+
+@media (max-width: 1024px) {
+    header h1 {
+        font-size: 2.2rem; 
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .privacy-policy-page {
+        padding: 5px; 
+    }
+
+    header h1 {
+        font-size: 1.8rem; 
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    p, a {
+        font-size: 0.8rem; 
+    }
+}
+
+a {
+    color: #FD5556; 
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #FF7778; 
+    text-decoration: none;
+}

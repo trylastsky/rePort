@@ -1,0 +1,80 @@
+.about-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: "Montserrat Alternates", sans-serif;
+    color: #F9F9F9; 
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.intro h1 {
+    font-size: 2.5rem;
+    color: #FD5556;
+}
+
+.advantages, .privacy-policy, .contact {
+    margin-bottom: 40px;
+}
+
+
+@media (max-width: 768px) {
+    .about-page {
+        padding: 10px; 
+    }
+
+    .intro h1 {
+        font-size: 2rem; 
+    }
+
+    h2 {
+        font-size: 1.5rem; 
+    }
+
+    p {
+        font-size: 1rem; 
+    }
+}
+
+
+@media (max-width: 1024px) {
+    .intro h1 {
+        font-size: 2.2rem; 
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .about-page {
+        padding: 5px; 
+    }
+
+    .intro h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem; 
+    }
+
+    p, a {
+        font-size: 0.9rem;
+    }
+}
+
+a {
+    color: #FD5556;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #FF7778;
+    text-decoration: none;
+}

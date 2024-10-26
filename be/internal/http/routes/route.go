@@ -13,5 +13,6 @@ func Routes(incomingRoutes *gin.Engine, db *mongodb.Storage) {
 	incomingRoutes.POST("api-v1/delete", datasetProvider.DeleteDataset())
 	incomingRoutes.POST("api-v1/update", datasetProvider.UpdateDataset())
 	incomingRoutes.POST("api-v1/getbyid", datasetProvider.GetDatasetByID())
+	incomingRoutes.GET("api-v1/get", datasetProvider.GetDatasets())
 
 }

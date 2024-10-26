@@ -2,6 +2,8 @@ package mongodb
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	log "github.com/rs/zerolog/log"
 	"github.com/trylastsky/rePort/internal/models"
@@ -15,16 +17,20 @@ func DatasetData(client *mongo.Client, collectionName string) *mongo.Collection 
 	return datasetsCollection
 }
 
-func (s *Storage) CreateDataset(ctx context.Context, data models.Dataset) error {
-	_, err := s.collection.Find(ctx, bson.M{"_id": data.ID})
-	if err != nil {
-		log.Err(err).Msg("error to create dataset")
-		return err
-	}
+func (s *Storage) CreateDataset(ctx context.Context, data models.Dataset) (string, error) {
+	// _, err := s.collection.Find(ctx, bson.M{"_id": data.ID})
+	// if err != nil {
+	// 	log.Err(err).Msg("error to create dataset")
+	// 	return err
+	// }
 
-	_, err = s.collection.InsertOne(ctx, data)
+	data.ID = primitive.NewObjectID()
 
-	return err
+	fmt.Println(data.ID)
+
+	_, err := s.collection.InsertOne(ctx, data)
+	fmt.Println(err)
+	return data.ID.Hex(), err
 }
 
 func (s *Storage) UpdateDataset(ctx context.Context, data models.Dataset) error {
@@ -56,22 +62,14 @@ func (s *Storage) DeleteDataset(ctx context.Context, id string) error {
 	return err
 }
 
-func (s *Storage) GetDatasetByID(ctx context.Context, id string) (*models.Dataset, error) {
-	_id, err := primitive.ObjectIDFromHex(id)
+func (s *Storage) GetDatasetByID(ctx context.Context, _id string) (*models.Dataset, error) {
+	id, err := primitive.ObjectIDFromHex(_id)
 	if err != nil {
 		return nil, err
 	}
-
-	_, err = s.collection.Find(ctx, bson.M{"_id": _id})
-	if err != nil {
-		log.Err(err).Msg("error to get by id dataset")
-		return nil, err
-	}
-
-	result := s.collection.FindOne(ctx, bson.M{"_id": _id})
-
 	var dataset *models.Dataset
-	err = result.Decode(dataset)
+
+	err = s.collection.FindOne(ctx, bson.M{"_id": id}).Decode(&dataset)
 	if err != nil {
 		log.Err(err).Msg("error decode dataset")
 		return nil, err
@@ -80,6 +78,27 @@ func (s *Storage) GetDatasetByID(ctx context.Context, id string) (*models.Datase
 	return dataset, nil
 }
 
-func (s *Storage) GetDatasets(ctx context.Context) {
+func (s *Storage) GetDatasets() []models.Dataset {
+	var advertisementList []models.Dataset
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
 
+	cursor, err := s.collection.Find(ctx, bson.D{{}})
+	if err != nil {
+		return nil
+	}
+
+	err = cursor.All(ctx, &advertisementList)
+	if err != nil {
+		return nil
+	}
+
+	defer cursor.Close(ctx)
+	if err := cursor.Err(); err != nil {
+		return nil
+	}
+
+	defer cancel()
+
+	return advertisementList
 }

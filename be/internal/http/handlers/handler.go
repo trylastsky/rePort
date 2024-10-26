@@ -22,7 +22,7 @@ type DatasetProvider struct {
 }
 
 type DatasetCreator interface {
-	CreateDataset(ctx context.Context, data models.Dataset) error
+	CreateDataset(ctx context.Context, data models.Dataset) (string, error)
 }
 
 type DatasetUpdater interface {
@@ -32,6 +32,7 @@ type DatasetUpdater interface {
 
 type DatasetGetter interface {
 	GetDatasetByID(ctx context.Context, id string) (*models.Dataset, error)
+	GetDatasets() []models.Dataset
 }
 
 func New(
@@ -69,10 +70,10 @@ func (dp *DatasetProvider) CreateDataset() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
-		err := dp.dc.CreateDataset(ctx, req.Dataset)
+		id, err := dp.dc.CreateDataset(ctx, req.Dataset)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"data": "success",
+				"data": id,
 			})
 		}
 	}
@@ -166,5 +167,15 @@ func (dp *DatasetProvider) GetDatasetByID() gin.HandlerFunc {
 				"data": dataset,
 			})
 		}
+	}
+}
+
+func (dp *DatasetProvider) GetDatasets() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		res := dp.dg.GetDatasets()
+		c.JSON(http.StatusOK, gin.H{
+			"data": res,
+		})
 	}
 }

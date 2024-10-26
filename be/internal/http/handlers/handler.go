@@ -7,9 +7,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/rs/zerolog/log"
 	"github.com/trylastsky/rePort/internal/models"
 )
+
+var Validate = validator.New()
 
 var (
 	ErrBindJson = errors.New("error bind json")
@@ -22,7 +25,7 @@ type DatasetProvider struct {
 }
 
 type DatasetCreator interface {
-	CreateDataset(ctx context.Context, data models.Dataset) error
+	CreateDataset(ctx context.Context, data models.Dataset) (string, error)
 }
 
 type DatasetUpdater interface {
@@ -32,6 +35,7 @@ type DatasetUpdater interface {
 
 type DatasetGetter interface {
 	GetDatasetByID(ctx context.Context, id string) (*models.Dataset, error)
+	GetDatasets() []models.Dataset
 }
 
 func New(
@@ -50,12 +54,8 @@ func New(
 
 func (dp *DatasetProvider) CreateDataset() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		type Request struct {
-			Dataset models.Dataset `json:"dataset" binding:"required"`
-		}
 
-		var req Request
-
+		var req models.Dataset
 		if err := c.ShouldBindJSON(&req); err != nil {
 			log.Err(err).Msg("error binding json")
 
@@ -66,15 +66,25 @@ func (dp *DatasetProvider) CreateDataset() gin.HandlerFunc {
 			return
 		}
 
+		validationErr := Validate.Struct(req)
+		if validationErr != nil {
+			log.Err(validationErr).Msg("")
+			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr})
+		}
+
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
-		err := dp.dc.CreateDataset(ctx, req.Dataset)
+		id, err := dp.dc.CreateDataset(ctx, req)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"data": "success",
+				"error": err,
 			})
 		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"data": id,
+		})
 	}
 }
 
@@ -166,5 +176,15 @@ func (dp *DatasetProvider) GetDatasetByID() gin.HandlerFunc {
 				"data": dataset,
 			})
 		}
+	}
+}
+
+func (dp *DatasetProvider) GetDatasets() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		res := dp.dg.GetDatasets()
+		c.JSON(http.StatusOK, gin.H{
+			"data": res,
+		})
 	}
 }

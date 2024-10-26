@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import Header from './components/modules/Header/Header'; 
 import MainPage from './components/OtherPages/MainPage/MainPage'; 
 import PrivacyPolicyPage from './components/OtherPages/PrivacyPolicyPage/PrivacyPolicyPage';
-import AboutPage from './components/AboutPage/AboutPage';
+import AboutPage from './components/OtherPages/AboutPage/AboutPage';
 import Footer from './components/modules/Footer/Footer';
 import Constructor from './components/MainLogic/Constructor/Constructor';
 import FileList from './components/MainLogic/FileList/FileList';
 import Navbar from './components/modules/NavBar/NavBar';
+import TrashPage from './components/MainLogic/TrashPage/TrashPage';
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -30,12 +31,12 @@ const App: React.FC = () => {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy-terms" element={<PrivacyPolicyPage />} />
           <Route path="/constructor-file_list" element={<FileList/>} />
-          {/* <Route path="/constructor-trash" element={<FileList/>} /> */}
+          <Route path="/constructor-trash" element={<TrashPage/>} />
           <Route path="/constructor-projects" element={<></>} />
           <Route path="/" element={<MainPage />} />
         </Routes>
       </main>
-
+    <Footer/>
     </div>
   );
 };

@@ -4,6 +4,7 @@ const FileUploader: React.FC = () => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files?.length) {
             const file = event.target.files[0];
+            console.log(file)
             const reader = new FileReader();
             //переделать
             reader.onload = () => {

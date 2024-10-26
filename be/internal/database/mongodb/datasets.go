@@ -2,7 +2,6 @@ package mongodb
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	log "github.com/rs/zerolog/log"
@@ -26,10 +25,7 @@ func (s *Storage) CreateDataset(ctx context.Context, data models.Dataset) (strin
 
 	data.ID = primitive.NewObjectID()
 
-	fmt.Println(data.ID)
-
 	_, err := s.collection.InsertOne(ctx, data)
-	fmt.Println(err)
 	return data.ID.Hex(), err
 }
 

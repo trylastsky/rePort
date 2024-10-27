@@ -142,7 +142,7 @@ func (dp *DatasetProvider) DeleteDataset() gin.HandlerFunc {
 
 		err := dp.du.DeleteDataset(ctx, req.ID)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{
 				"data": "success",
 			})
 		}
@@ -173,9 +173,13 @@ func (dp *DatasetProvider) GetDatasetByID() gin.HandlerFunc {
 		dataset, err := dp.dg.GetDatasetByID(ctx, req.ID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"data": dataset,
+				"erorr": err,
 			})
 		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"data": dataset,
+		})
 	}
 }
 

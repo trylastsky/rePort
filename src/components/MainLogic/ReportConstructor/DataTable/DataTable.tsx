@@ -2,26 +2,55 @@ import React, { useState, useEffect } from 'react';
 import { useTable } from 'react-table';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
+import Papa from "papaparse";
 import './DataTable.css';
+
+interface FileItem {
+    name: string;
+    data: string;
+}
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
 const DataTable: React.FC<{ data: any[] }> = ({ data }) => {
     const [tableData, setTableData] = useState(data);
     const [charts, setCharts] = useState<{ type: 'bar' | 'doughnut'; column: string; width: number; height: number; theme: string }[]>([]);
-    const [selectedColumn, setSelectedColumn] = useState<string>('');
+    const [selectedColumn, setSelectedColumn] = useState<string>();
     const [chartType, setChartType] = useState<'bar' | 'doughnut'>('bar');
     const [chartWidth, setChartWidth] = useState<number>(400);
-    const [chartHeight, setChartHeight] = useState<number>(300);
+    const [chartHeight, setChartHeight] = useState<number>(400);
     const [chartTheme, setChartTheme] = useState<string>('light');
 
-    // Загрузка сохраненных графиков из localStorage
-    useEffect(() => {
-        const savedCharts = localStorage.getItem('charts');
-        if (savedCharts) {
-            setCharts(JSON.parse(savedCharts));
-            console.log(savedCharts)
+    const loadFiles = () => {
+        const storedFiles: FileItem[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('file-')) {
+                storedFiles.push({
+                    name: key.substring(5),
+                    data: localStorage.getItem(key) || ''
+                });
+            }
         }
+        // Перебираем  `storedFiles`  и парсим каждую строку с помощью  `Papa.parse()`
+    storedFiles.forEach(fileItem => {
+        Papa.parse(fileItem.data, {
+            header: true,
+            complete: (results) => {
+                // Преобразуйте  `results.data`  в формат, 
+                // который вы хотите использовать для таблицы
+                console.log(results.data);
+            }
+        });
+    });
+
+    setTableData(storedFiles);
+    console.log(storedFiles);
+};
+
+
+    useEffect(() => {
+        loadFiles();
     }, []);
 
     // Сохранение графиков в localStorage при каждом обновлении
@@ -35,8 +64,8 @@ const DataTable: React.FC<{ data: any[] }> = ({ data }) => {
     };
 
     const handleAddChart = () => {
-        if (charts.length >= 2) {
-            alert('Можно добавить до 2 диаграмм');
+        if (charts.length >= 5) {
+            alert('Можно добавить до 5 диаграмм');
             return;
         }
         if (selectedColumn === '') {
@@ -59,7 +88,9 @@ const DataTable: React.FC<{ data: any[] }> = ({ data }) => {
             {
                 Header: 'Действия',
                 Cell: ({ row }: any) => (
-                    <button className="delete-button" onClick={() => handleDelete(row.index)}>Удалить</button>
+                    <button className="delete-button" onClick={() => 
+                        handleDelete(row.index)
+                    }>Удалить</button>
                 ),
             },
         ];

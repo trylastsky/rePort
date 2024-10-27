@@ -5,6 +5,10 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+
+td {
+    user-select: text;
+}
 .add-chart-button {
     margin-bottom: 20px;
     padding: 10px 15px;

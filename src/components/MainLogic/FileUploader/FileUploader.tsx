@@ -1,6 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+interface FileItem {
+    name: string;
+    data: string;
+}
+
+
 
 const FileUploader: React.FC = () => {
+
+    const [files, setFiles] = useState<FileItem[]>([]);
+
+    const loadFiles = () => {
+        const storedFiles: FileItem[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('file-')) {
+                storedFiles.push({
+                    name: key.substring(5),
+                    data: localStorage.getItem(key) || ''
+                });
+            }
+        }
+        setFiles(storedFiles);
+        setData(storedFiles);
+    };
+
+
+    useEffect(() => {
+        loadFiles();
+    }, []);
+
+    
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files?.length) {
             const file = event.target.files[0];
@@ -51,3 +82,7 @@ const FileUploader: React.FC = () => {
 };
 
 export default FileUploader;
+function setData(storedFiles: FileItem[]) {
+    throw new Error('Function not implemented.');
+}
+

@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"time"
-
 	"github.com/trylastsky/rePort/internal/config"
 	"github.com/trylastsky/rePort/internal/database/mongodb"
 	server "github.com/trylastsky/rePort/internal/http"
@@ -17,7 +14,6 @@ func main() {
 
 	storage := mongodb.NewStorage(client, datasetsCollection)
 
-	fmt.Println(time.Now())
 	serve := server.NewServe(storage)
 	serve.Start("localhost", server.WithPort(8090))
 }
